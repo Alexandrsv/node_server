@@ -1,5 +1,5 @@
-import express from "express";
-import usersRouter from "./users/users.js";
+import express, { NextFunction, Request, Response } from "express";
+import { userRouter } from "./users/users.js";
 
 const port = 8000;
 const app = express();
@@ -18,11 +18,11 @@ app.get("/hi", (req, res) => {
   throw new Error("Ошибка в запросе");
 });
 
-app.use("/users", usersRouter);
+app.use("/users", userRouter);
 
-app.use((err, req, res, next) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log("Ошибка в запросе: ", { err });
-  res.status(500).send(`${err}`);
+  res.status(500).send(`${err.message}`);
 });
 
 app.listen(port, () => {

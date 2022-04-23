@@ -15,4 +15,4 @@ userRouter.post("/register", (req, res) => {
   res.send("register");
 });
 
-export default userRouter;
+export { userRouter };
