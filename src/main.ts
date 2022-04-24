@@ -1,8 +1,9 @@
 import { App } from "./app";
+import { LoggerService } from "./logger/logger.service";
 
-async function bootsrap() {
-  const app = new App();
+async function bootstrap() {
+  const app = new App(new LoggerService());
   await app.init();
 }
 
-bootsrap();
+bootstrap();
