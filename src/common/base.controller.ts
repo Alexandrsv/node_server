@@ -1,5 +1,5 @@
 import { Response, Router } from "express";
-import { IControllerRoute } from "./route.interface";
+import { ExpressReturnType, IControllerRoute } from "./route.interface";
 import { ILogger } from "../logger/logger.interface";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
@@ -17,23 +17,21 @@ export abstract class BaseController {
     return this._router;
   }
 
-  public created(res: Response): Response {
+  public created(res: Response): ExpressReturnType {
     return res.sendStatus(201);
   }
 
-  public send<T>(res: Response, code: number, data: T): Response {
+  public send<T>(res: Response, code: number, data: T): ExpressReturnType {
     return res.status(code).json(data);
   }
 
-  public ok<T>(res: Response, data: T): Response {
+  public ok<T>(res: Response, data: T): ExpressReturnType {
     return this.send<T>(res, 200, data);
   }
 
   protected bindRoutes(routes: IControllerRoute[]): void {
     for (const route of routes) {
-      this.logger.log(
-        `Binding route ${route.method.toUpperCase()} ${route.path}`
-      );
+      this.logger.log(`Binding route ${route.method.toUpperCase()} ${route.path}`);
       const handler = route.func.bind(this);
       this.router[route.method](route.path, handler);
     }

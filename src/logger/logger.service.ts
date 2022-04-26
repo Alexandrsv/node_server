@@ -16,15 +16,15 @@ export class LoggerService implements ILogger {
     });
   }
 
-  log(message: string, ...optionalParams: any[]) {
+  log(message: string, ...optionalParams: any[]): void {
     this.logger.info(message, ...optionalParams);
   }
 
-  warn(message: string, ...optionalParams: any[]) {
+  warn(message: string, ...optionalParams: any[]): void {
     this.logger.warn(message, ...optionalParams);
   }
 
-  error(message: string, ...optionalParams: any[]) {
+  error(message: string, ...optionalParams: any[]): void {
     this.logger.error(message, ...optionalParams);
   }
 }

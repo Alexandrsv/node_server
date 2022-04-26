@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 function Component(id: number) {
   console.log("init component", id);
   return (target: Function) => {
@@ -13,11 +15,7 @@ function Logger() {
   };
 }
 
-function Method(
-  target: Object,
-  propertyKey: string,
-  descriptor: PropertyDescriptor
-) {
+function Method(target: Object, propertyKey: string, descriptor: PropertyDescriptor) {
   console.log("init method", { target, propertyKey, descriptor });
   const oldValue = descriptor.value;
 

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import "reflect-metadata";
 
 function Injectable(key: string) {
