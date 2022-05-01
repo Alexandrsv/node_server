@@ -5,3 +5,4 @@ dist
 /.clinic
 .env
 /prisma/devdb.sqlite
+/prisma/devdb.sqlite-journal

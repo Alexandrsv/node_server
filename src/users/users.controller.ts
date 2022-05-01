@@ -42,7 +42,8 @@ export class UserController extends BaseController implements IUserController {
     const result = await this.usersService.createUser(req.body);
     if (!result) {
       next(new HttpError(422, "пользователь с таким именем уже существует", "register"));
+    } else {
+      this.ok(res, { email: result?.email, id: result?.id });
     }
-    this.ok(res, { email: result?.email });
   }
 }
