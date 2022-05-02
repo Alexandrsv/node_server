@@ -8,14 +8,17 @@ import "reflect-metadata";
 import { IUserController } from "./users.controller.interface";
 import { UserLoginDto } from "./dto/user-login.dto";
 import { UserRegisterDto } from "./dto/user-register.dto";
-import { UsersService } from "./users.service";
 import { ValidateMiddleware } from "../common/validate.middleware";
+import { sign } from "jsonwebtoken";
+import { IConfigService } from "../config/config.service.interface";
+import { IUsersService } from "./users.service.interface";
 
 @injectable()
 export class UserController extends BaseController implements IUserController {
   constructor(
     @inject(TYPES.ILogger) private loggerService: ILogger,
-    @inject(TYPES.UsersService) private usersService: UsersService,
+    @inject(TYPES.UsersService) private usersService: IUsersService,
+    @inject(TYPES.ConfigService) private configService: IConfigService,
   ) {
     super(loggerService);
     this.bindRoutes([
@@ -38,7 +41,8 @@ export class UserController extends BaseController implements IUserController {
     if (!result) {
       return next(new HttpError(400, "Authentication failed"));
     }
-    this.ok(res, {});
+    const jwt = await this.signJWT(req.body.email, this.configService.get("JWT_SECRET"));
+    this.ok(res, { jwt });
   }
 
   async register(
@@ -52,5 +56,26 @@ export class UserController extends BaseController implements IUserController {
     } else {
       this.ok(res, { email: result?.email, id: result?.id });
     }
+  }
+
+  private signJWT(email: string, secret: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      sign(
+        {
+          email,
+          iat: Math.floor(Date.now() / 1000),
+        },
+        secret,
+        {
+          algorithm: "HS256",
+        },
+        (err, token) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(token as string);
+        },
+      );
+    });
   }
 }
