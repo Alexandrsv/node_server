@@ -24,7 +24,6 @@ export class App {
     @inject(TYPES.ConfigService) private configService: IConfigService,
     @inject(TYPES.PrismaService) private prismaService: PrismaService,
   ) {
-    console.log("app");
     this.app = express();
     this.port = 8000;
   }
@@ -45,7 +44,6 @@ export class App {
   }
 
   public async init(): Promise<void> {
-    console.log("app init");
     this.useMiddleware();
     this.useRoutes();
     this.useExceptionFilters();
